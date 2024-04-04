@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240228160000" author="t1m4ay">
+        <createTable tableName="product_item">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name_ru" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="name_en" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="name_kz" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="ready_duration" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            <column name="min_age" type="integer">
+                <constraints nullable="true" />
+            </column>
+            <column name="cost" type="decimal(19, 2)">
+                <constraints nullable="true" />
+            </column>
+            <column name="description" type="text">
+                <constraints nullable="true" />
+            </column>
+            <column name="start_available_time" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            <column name="end_available_time" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            <column name="image_url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+</databaseChangeLog>

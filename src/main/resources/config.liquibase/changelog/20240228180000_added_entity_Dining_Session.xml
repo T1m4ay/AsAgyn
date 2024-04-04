@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240228180000" author="t1m4ay">
+        <createTable tableName="dining_session">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="start_date_time" type="timestamp">
+                <constraints nullable="true" />
+            </column>
+            <column name="establishment_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240228180000-relations" author="t1m4ay">
+        <addForeignKeyConstraint
+                baseTableName="dining_session"
+                baseColumnNames="establishment_id"
+                constraintName="fk_dining_session_establishment"
+                referencedTableName="establishment"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

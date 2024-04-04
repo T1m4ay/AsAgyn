@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240216172300-1" author="t1m4ay">
+        <createTable tableName="payment_method">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240228120000-2-relations" author="t1m4ay">
+        <createTable tableName="rel_payment_method__establishment">
+            <column name="payment_method_id" type="bigint" />
+            <column name="establishment_id" type="bigint" />
+        </createTable>
+        <addForeignKeyConstraint
+                baseTableName="rel_payment_method__establishment"
+                baseColumnNames="payment_method_id"
+                constraintName="fk_payment_method_establishment_payment_method"
+                referencedTableName="payment_method"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="rel_payment_method__establishment"
+                baseColumnNames="establishment_id"
+                constraintName="fk_payment_method_establishment_establishment"
+                referencedTableName="establishment"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+</databaseChangeLog>

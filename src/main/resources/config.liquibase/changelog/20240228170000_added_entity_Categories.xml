@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
+                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+
+    <changeSet id="20240228170000" author="t1m4ay">
+        <createTable tableName="categories">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true" nullable="false" />
+            </column>
+            <column name="name" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20240228170000-relations" author="t1m4ay">
+        <createTable tableName="rel_category__product_item">
+            <column name="category_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+            <column name="product_item_id" type="bigint">
+                <constraints nullable="false" />
+            </column>
+        </createTable>
+        <addPrimaryKey
+                tableName="rel_category__product_item"
+                columnNames="category_id, product_item_id"
+                constraintName="pk_rel_category__product_item" />
+
+        <addForeignKeyConstraint
+                baseTableName="rel_category__product_item"
+                baseColumnNames="category_id"
+                constraintName="fk_rel_category__product_item_category"
+                referencedTableName="categories"
+                referencedColumnNames="id"/>
+
+        <addForeignKeyConstraint
+                baseTableName="rel_category__product_item"
+                baseColumnNames="product_item_id"
+                constraintName="fk_rel_category__product_item_product_item"
+                referencedTableName="product_item"
+                referencedColumnNames="id"/>
+    </changeSet>
+
+
+</databaseChangeLog>
