@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Set;
 
 @RestController
@@ -27,7 +26,7 @@ public class ProductItemController {
     }
 
     @PostMapping("")
-    public ResponseEntity<ProductItemDTO> create(@Valid @RequestBody ProductItemDTO productItemDTO){
+    public ResponseEntity<ProductItemDTO> create(@RequestBody ProductItemDTO productItemDTO){
         ResponseDTO<ProductItemDTO> responseDTO = productItemService.create(productItemDTO);
         if (responseDTO.getHasErrors()) {
             return ResponseEntity.badRequest().body(responseDTO.getObject());
@@ -38,7 +37,7 @@ public class ProductItemController {
     @PutMapping("/{id}")
     public ResponseEntity<ProductItemDTO> partialUpdate(
             @PathVariable Long id,
-            @Valid @RequestBody ProductItemDTO productItemDTO){
+            @RequestBody ProductItemDTO productItemDTO){
         ResponseDTO<ProductItemDTO> responseDTO = productItemService.update(productItemDTO, id);
         if (responseDTO.getHasErrors()) {
             return ResponseEntity.badRequest().body(responseDTO.getObject());

@@ -38,7 +38,7 @@ public class EstablishmentController {
         return service.getRevenue(id, betweenDatesCriteria);
     }
 
-    @GetMapping("/revenue-every-month-period/{id")
+    @GetMapping("/revenue-every-month-period/{id}")
     public List<MonthRevenueDTO> getRevenueEveryMonthPeriod(@PathVariable Long id){
         return service.getMonthRevenue(id);
     }

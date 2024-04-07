@@ -1,13 +1,14 @@
 server:
   port: 8080
-
+  servlet:
+    context-path: /demo
 spring:
   main:
-    web-application-type: servlet
+    allow-circular-references: true
   datasource:
     url: jdbc:postgresql://localhost:5432/asagyn
     password: 123456
-    username: postgres
+    username: suppliers_portal
   jpa:
     hibernate:
       ddl-auto: none
@@ -15,10 +16,7 @@ spring:
   liquibase:
     change-log: classpath:/config.liquibase/changelog-master.xml
 
-security:
-  authentication:
-    jwt:
-      base64-secret: ${JWT_SECRET:ODVjYWU2ZDUzYjI0NzhjNTc4NzZjYzY1ODc5Nzk4OGI3MWMzYjUzZWY5N2Y2MzAxYzRmMmQ3MGJhMDQ5NjQ4YzhmMWFiYmM0NTdmZmY1MjgwODczZmI4OWMzMzNlZjcyMmE1MzA5ODEyOTNiMDEyOTdiMjQ1M2FjNDMzNjZjODg=}
-      token-validity-in-seconds: 86400
-      token-validity-in-seconds-for-remember-me: 2592000
+jwt:
+  secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
+  lifetime: 10m
 

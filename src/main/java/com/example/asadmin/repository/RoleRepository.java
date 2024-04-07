@@ -1,12 +1,12 @@
 package com.example.asadmin.repository;
 
-import com.example.asadmin.model.User;
+import com.example.asadmin.model.Role;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.Optional;
 
 @Repository
-public interface UserRepository extends CrudRepository<User, Long> {
-    Optional<User> findByUsername(String username);
+public interface RoleRepository extends CrudRepository<Role, Integer> {
+    Optional<Role> findByName(String name);
 }

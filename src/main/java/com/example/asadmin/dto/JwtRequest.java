@@ -3,7 +3,7 @@ package com.example.asadmin.dto;
 import lombok.Data;
 
 @Data
-public class AuthenticationRequestDto {
+public class JwtRequest {
     private String username;
     private String password;
 }
