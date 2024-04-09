@@ -11,6 +11,8 @@ import com.example.asadmin.repository.EstablishmentRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
@@ -24,9 +26,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class EstablishmentService {
 
-    private EstablishmentRepository repository;
+    private final EstablishmentRepository repository;
 
-    private EstablishmentMapper mapper;
+    private final EstablishmentMapper mapper;
+
+    private final UserService userService;
+
+    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     public Establishment save(Establishment establishment){
         return repository.save(establishment);
@@ -124,4 +130,24 @@ public class EstablishmentService {
         return monthRevenueDTOS;
     }
 
+    public Establishment findById(Long id){
+        return repository.findById(id).orElse(null);
+    }
+
+    public EstablishmentDTO findEstablishmentDTOById(Long id){
+        return mapper.toDTO(repository.findById(id).orElse(null));
+    }
+
+    public EstablishmentDTO create(EstablishmentDTO establishmentDTO){
+        Establishment establishment = mapper.toEntity(establishmentDTO);
+        establishment.setUser(userService.findByUsername(authentication.getName()).orElse(null));
+        return mapper.toDTO(repository.save(establishment));
+    }
+
+    public EstablishmentDTO getEstablishment(){
+        return mapper.toDTO(
+                repository.findAllByUser(
+                        userService.findByUsername(authentication.getName()).orElse(null)
+                ));
+    }
 }

@@ -8,7 +8,7 @@
 
     <changeSet id="20240228150000" author="t1m4ay">
         <createTable tableName="menu">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="establishment_id" type="bigint">

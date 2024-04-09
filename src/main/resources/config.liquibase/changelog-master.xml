@@ -27,6 +27,7 @@
     <include file="/config.liquibase/migration/V1__init.sql" relativeToChangelogFile="false"/>
     <include file="/config.liquibase/migration/V2__init.sql" relativeToChangelogFile="false"/>
     <include file="/config.liquibase/migration/V3__init.sql" relativeToChangelogFile="false"/>
-
+    <include file="/config.liquibase/migration/V4__init.sql" relativeToChangelogFile="false"/>
+    <include file="/config.liquibase/migration/V5__init.sql" relativeToChangelogFile="false"/>
 
 </databaseChangeLog>

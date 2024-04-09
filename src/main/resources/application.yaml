@@ -1,5 +1,5 @@
 server:
-  port: 8080
+  port: 8888
   servlet:
     context-path: /demo
 spring:
@@ -15,8 +15,17 @@ spring:
     show-sql: false
   liquibase:
     change-log: classpath:/config.liquibase/changelog-master.xml
+  messages:
+    basename: i18n/messages
+    mvc:
+      locale: ru_RU
 
 jwt:
   secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf
   lifetime: 10m
 
+pusher:
+  app_id: 1783988
+  key: 1b1aac5f3ed531c5e179
+  secret: d6eafbe9223fb0184c85
+  cluster: ap2

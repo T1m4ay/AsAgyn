@@ -2,10 +2,12 @@ package com.example.asadmin.validator;
 
 import com.example.asadmin.dto.ProductItemDTO;
 import com.example.asadmin.web.rest.errors.FieldErrorInfo;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 
 import java.util.List;
 
+@Component
 public class ProductItemValidator extends BaseValidator<ProductItemDTO>{
 
     @Override
@@ -37,7 +39,7 @@ public class ProductItemValidator extends BaseValidator<ProductItemDTO>{
             dto.getFieldErrorInfos()
                     .add(
                             new FieldErrorInfo("productName",
-                                    getLocalizedMessage("Названия блюда должно быть заполненым")));
+                                    getLocalizedMessage("error.validation.productitem.name")));
             validatorResponse.setHasErrors(true);
         }
         validatorResponse.setObject(dto);

@@ -1,9 +1,6 @@
 package com.example.asadmin.service;
 
-import com.example.asadmin.dto.JwtRequest;
-import com.example.asadmin.dto.JwtResponse;
-import com.example.asadmin.dto.RegistrationUserDto;
-import com.example.asadmin.dto.UserDto;
+import com.example.asadmin.dto.*;
 import com.example.asadmin.model.User;
 import com.example.asadmin.utils.JwtTokenUtils;
 import com.example.asadmin.web.rest.errors.AppError;

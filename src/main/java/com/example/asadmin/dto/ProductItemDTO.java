@@ -38,6 +38,8 @@ public class ProductItemDTO {
     @JsonProperty("errorFields")
     private List<FieldErrorInfo> fieldErrorInfos = new ArrayList<>();
 
+    private MenuDTO menuDTO;
+
     public Long getId() {
         return id;
     }
@@ -140,5 +142,40 @@ public class ProductItemDTO {
 
     public void setFieldErrorInfos(List<FieldErrorInfo> fieldErrorInfos) {
         this.fieldErrorInfos = fieldErrorInfos;
+    }
+
+    public Set<CategoryDTO> getCategoryDTOS() {
+        return categoryDTOS;
+    }
+
+    public void setCategoryDTOS(Set<CategoryDTO> categoryDTOS) {
+        this.categoryDTOS = categoryDTOS;
+    }
+
+    public MenuDTO getMenuDTO() {
+        return menuDTO;
+    }
+
+    public void setMenuDTO(MenuDTO menuDTO) {
+        this.menuDTO = menuDTO;
+    }
+
+    @Override
+    public String toString() {
+        return "ProductItemDTO{" +
+                "id=" + id +
+                ", nameRu='" + nameRu + '\'' +
+                ", nameEn='" + nameEn + '\'' +
+                ", nameKz='" + nameKz + '\'' +
+                ", readyDuration=" + readyDuration +
+                ", minAge=" + minAge +
+                ", cost=" + cost +
+                ", description='" + description + '\'' +
+                ", startAvailableTime=" + startAvailableTime +
+                ", endAvailableTime=" + endAvailableTime +
+                ", categoryDTOS=" + categoryDTOS +
+                ", imageUrl='" + imageUrl + '\'' +
+                ", fieldErrorInfos=" + fieldErrorInfos +
+                '}';
     }
 }

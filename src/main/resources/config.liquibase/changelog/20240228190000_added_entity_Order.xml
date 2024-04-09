@@ -8,7 +8,7 @@
 
     <changeSet id="20240228190000" author="t1m4ay">
         <createTable tableName="order">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="status" type="varchar(255)">

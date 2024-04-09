@@ -7,8 +7,8 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="20240216172300-1" author="t1m4ay">
-        <createTable tableName="payment_method">
-            <column name="id" type="bigint">
+        <createTable tableName="payment_method" >
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="name" type="varchar(255)">

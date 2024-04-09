@@ -1,4 +1,6 @@
 insert into users_roles (user_id, role_id)
 values
-    (1, 8),
-    (2, 9);
+    (1, 1),
+    (2, 2),
+    (3, 3),
+    (4, 4);

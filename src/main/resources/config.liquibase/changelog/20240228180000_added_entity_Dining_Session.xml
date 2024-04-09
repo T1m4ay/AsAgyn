@@ -8,7 +8,7 @@
 
     <changeSet id="20240228180000" author="t1m4ay">
         <createTable tableName="dining_session">
-            <column name="id" type="bigint">
+            <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
             <column name="start_date_time" type="timestamp">

@@ -61,6 +61,9 @@ public class ProductItem implements Serializable {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Menu menu;
+
     public Long getId() {
         return id;
     }
@@ -155,5 +158,13 @@ public class ProductItem implements Serializable {
 
     public void setImageUrl(String imageUrl) {
         this.imageUrl = imageUrl;
+    }
+
+    public Menu getMenu() {
+        return menu;
+    }
+
+    public void setMenu(Menu menu) {
+        this.menu = menu;
     }
 }

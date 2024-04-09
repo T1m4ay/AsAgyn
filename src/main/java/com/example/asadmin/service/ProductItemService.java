@@ -1,6 +1,7 @@
 package com.example.asadmin.service;
 
 import com.example.asadmin.criteria.ProductItemCriteria;
+import com.example.asadmin.dto.MenuDTO;
 import com.example.asadmin.dto.PageResponse;
 import com.example.asadmin.dto.ProductItemDTO;
 import com.example.asadmin.dto.ResponseDTO;
@@ -17,7 +18,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
-import org.springframework.util.StringUtils;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
@@ -30,13 +30,15 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ProductItemService {
 
-    private ProductItemRepository repository;
+    private final ProductItemRepository repository;
 
-    private ProductItemMapper mapper;
+    private final ProductItemMapper mapper;
 
-    private ProductItemValidator productItemValidator;
+    private final ProductItemValidator productItemValidator;
 
-    private CategoryMapper categoryMapper;
+    private final CategoryMapper categoryMapper;
+
+    private final MenuService menuService;
 
     public ProductItem save(ProductItem productItem){
         return repository.save(productItem);
@@ -64,14 +66,16 @@ public class ProductItemService {
             if (criteria.getCategories() != null) {
                 predicates.add(criteriaBuilder.equal(root.get("status"), criteria.getCategories()));
             }
-            if (!criteria.getQuery().trim().isEmpty()) {
-                Predicate nameRuPredicate = criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("nameRu")),
-                        "%" + criteria.getQuery().toLowerCase() + "%");
-                Predicate descriptionPredicate = criteriaBuilder.like(
-                        criteriaBuilder.lower(root.get("description")),
-                        "%" + criteria.getQuery().toLowerCase() + "%");
-                predicates.add(criteriaBuilder.or(nameRuPredicate,descriptionPredicate));
+            if (criteria.getQuery() != null) {
+                if (!criteria.getQuery().trim().isEmpty()) {
+                    Predicate nameRuPredicate = criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("nameRu")),
+                            "%" + criteria.getQuery().toLowerCase() + "%");
+                    Predicate descriptionPredicate = criteriaBuilder.like(
+                            criteriaBuilder.lower(root.get("description")),
+                            "%" + criteria.getQuery().toLowerCase() + "%");
+                    predicates.add(criteriaBuilder.or(nameRuPredicate,descriptionPredicate));
+                }
             }
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };

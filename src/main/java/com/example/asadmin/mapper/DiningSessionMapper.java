@@ -9,9 +9,7 @@ public class DiningSessionMapper {
 
     private EstablishmentMapper establishmentMapper;
 
-    public DiningSessionMapper(
-            EstablishmentMapper establishmentMapper
-    ){
+    public DiningSessionMapper(EstablishmentMapper establishmentMapper){
         this.establishmentMapper = establishmentMapper;
     };
 

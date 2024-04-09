@@ -5,6 +5,7 @@ import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
+import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -36,6 +37,10 @@ public class Establishment implements Serializable {
     @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "establishment")
     private Set<DiningSession> diningSessions;
+
+    @OneToOne
+    @JoinColumn(unique = true)
+    private User user;
 
     public Long getId() {
         return id;
@@ -78,5 +83,13 @@ public class Establishment implements Serializable {
             this.diningSessions = new HashSet<>();
         }
         this.diningSessions = diningSessions;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

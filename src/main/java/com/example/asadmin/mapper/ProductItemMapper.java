@@ -8,8 +8,11 @@ import org.springframework.stereotype.Component;
 public class ProductItemMapper {
     private final CategoryMapper categoryMapper;
 
-    public ProductItemMapper(CategoryMapper categoryMapper){
+    private final MenuMapper menuMapper;
+
+    public ProductItemMapper(CategoryMapper categoryMapper, MenuMapper menuMapper){
         this.categoryMapper = categoryMapper;
+        this.menuMapper = menuMapper;
     }
 
     public ProductItemDTO toDto(ProductItem productItem){
@@ -52,6 +55,7 @@ public class ProductItemMapper {
         productItem.setEndAvailableTime(productItemDTO.getEndAvailableTime());
         productItem.setCategories(categoryMapper.toEntities(productItemDTO.getCategories()));
         productItem.setImageUrl(productItemDTO.getImageUrl());
+        productItem.setMenu(menuMapper.toEntity(productItemDTO.getMenuDTO()));
 
         return productItem;
     }

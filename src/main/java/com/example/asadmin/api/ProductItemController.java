@@ -7,6 +7,7 @@ import com.example.asadmin.dto.ResponseDTO;
 import com.example.asadmin.service.ProductItemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
@@ -18,6 +19,7 @@ public class ProductItemController {
     @Autowired
     ProductItemService productItemService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("")
     public PageResponse<ProductItemDTO> getAllProductItemsPage(
             ProductItemCriteria productItemCriteria,
@@ -25,6 +27,7 @@ public class ProductItemController {
         return productItemService.getAll(productItemCriteria, sort);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PostMapping("")
     public ResponseEntity<ProductItemDTO> create(@RequestBody ProductItemDTO productItemDTO){
         ResponseDTO<ProductItemDTO> responseDTO = productItemService.create(productItemDTO);
@@ -34,6 +37,7 @@ public class ProductItemController {
         return ResponseEntity.ok(responseDTO.getObject());
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductItemDTO> partialUpdate(
             @PathVariable Long id,
