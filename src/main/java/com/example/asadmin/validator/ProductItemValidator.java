@@ -14,25 +14,25 @@ public class ProductItemValidator extends BaseValidator<ProductItemDTO>{
     public ValidatorResponse<ProductItemDTO> validate(ProductItemDTO dto){
         ValidatorResponse<ProductItemDTO> validatorResponse = new ValidatorResponse<>();
         validatorResponse.setObject(dto);
-        if(ObjectUtils.isEmpty(dto.getCategories())){
+        if(ObjectUtils.isEmpty(dto.getCategoryDTOS())){
             dto.getFieldErrorInfos()
                     .add(
                             new FieldErrorInfo("category",
-                                    getLocalizedMessage("Нужно выбрать один или несколько категориев")));
+                                    getLocalizedMessage("error.validation.productitem.category")));
             validatorResponse.setHasErrors(true);
         }
         if(ObjectUtils.isEmpty(dto.getCost())){
             dto.getFieldErrorInfos()
                     .add(
                             new FieldErrorInfo("cost",
-                                    getLocalizedMessage("Поле стоимость должно быть заполненым")));
+                                    getLocalizedMessage("error.validation.productitem.cost")));
             validatorResponse.setHasErrors(true);
         }
         if(ObjectUtils.isEmpty(dto.getReadyDuration())){
             dto.getFieldErrorInfos()
                     .add(
                             new FieldErrorInfo("readyDuration",
-                                    getLocalizedMessage("Время готовки должно быть заполненым")));
+                                    getLocalizedMessage("error.validation.productitem.readyDuration")));
             validatorResponse.setHasErrors(true);
         }
         if(ObjectUtils.isEmpty(dto.getNameRu())){

@@ -5,10 +5,9 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class NumberOrderDTO {
-
+public class PaymentMethodDTO {
     private Long id;
 
-    private int count;
+    private String name;
 
 }

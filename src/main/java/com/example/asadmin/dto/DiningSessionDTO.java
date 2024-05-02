@@ -1,14 +1,21 @@
 package com.example.asadmin.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.ZonedDateTime;
 
 public class DiningSessionDTO {
 
     private Long id;
 
-    private ZonedDateTime startDateTime;
+    private String startDateTime;
 
-    private EstablishmentDTO establishmentDTO;
+    private EstablishmentDTO establishmentDTO = new EstablishmentDTO();
+
+    private Boolean isClose;;
+
+    private UserDto userDto;
 
     public Long getId() {
         return id;
@@ -18,11 +25,11 @@ public class DiningSessionDTO {
         this.id = id;
     }
 
-    public ZonedDateTime getStartDateTime() {
+    public String getStartDateTime() {
         return startDateTime;
     }
 
-    public void setStartDateTime(ZonedDateTime startDateTime) {
+    public void setStartDateTime(String startDateTime) {
         this.startDateTime = startDateTime;
     }
 
@@ -32,5 +39,21 @@ public class DiningSessionDTO {
 
     public void setEstablishmentDTO(EstablishmentDTO establishmentDTO) {
         this.establishmentDTO = establishmentDTO;
+    }
+
+    public Boolean getClose() {
+        return isClose;
+    }
+
+    public void setClose(Boolean close) {
+        isClose = close;
+    }
+
+    public UserDto getUserDto() {
+        return userDto;
+    }
+
+    public void setUserDto(UserDto userDto) {
+        this.userDto = userDto;
     }
 }

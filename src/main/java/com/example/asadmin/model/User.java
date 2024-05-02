@@ -1,5 +1,6 @@
 package com.example.asadmin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -22,6 +23,9 @@ public class User {
 
     @Column(name = "email")
     private String email;
+
+    @Column(name = "is_delete")
+    private Boolean isDelete;
 
     @ManyToMany
     @JoinTable(

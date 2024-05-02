@@ -41,7 +41,20 @@
             <column name="image_url" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="menu_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="20240228160000-relations" author="t1m4ay">
+        <addForeignKeyConstraint
+                baseTableName="product_item"
+                baseColumnNames="menu_id"
+                constraintName="fk_product_item_menu"
+                referencedTableName="menu"
+                referencedColumnNames="id"
+                onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

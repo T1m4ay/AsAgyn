@@ -9,8 +9,14 @@ public class MenuMapper {
 
     private EstablishmentMapper establishmentMapper;
 
-    public MenuMapper(EstablishmentMapper establishmentMapper){
+    private ProductItemMapper productItemMapper;
+
+    public MenuMapper(
+            EstablishmentMapper establishmentMapper,
+            ProductItemMapper productItemMapper
+    ){
         this.establishmentMapper = establishmentMapper;
+        this.productItemMapper = productItemMapper;
     }
 
     public MenuDTO toDTO(Menu menu){
@@ -22,6 +28,9 @@ public class MenuMapper {
 
         menuDTO.setId(menu.getId());
         menuDTO.setEstablishmentDTO(establishmentMapper.toDTO(menu.getEstablishment()));
+        if(menu.getProductItems() != null){
+            menuDTO.setProductItemDTOs(productItemMapper.toDtos(menu.getProductItems()));
+        }
 
         return menuDTO;
     }

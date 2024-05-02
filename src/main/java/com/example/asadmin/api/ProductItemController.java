@@ -20,21 +20,29 @@ public class ProductItemController {
     ProductItemService productItemService;
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    @GetMapping("")
+    @GetMapping("/in-menu/{menuId}")
     public PageResponse<ProductItemDTO> getAllProductItemsPage(
+            @PathVariable Long menuId,
             ProductItemCriteria productItemCriteria,
             @RequestParam(required = false) Set<String> sort){
-        return productItemService.getAll(productItemCriteria, sort);
+        return productItemService.getAll(productItemCriteria, sort, menuId);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    @PostMapping("")
-    public ResponseEntity<ProductItemDTO> create(@RequestBody ProductItemDTO productItemDTO){
-        ResponseDTO<ProductItemDTO> responseDTO = productItemService.create(productItemDTO);
+    @PostMapping("/in-menu/{menuId}")
+    public ResponseEntity<ProductItemDTO> create(@PathVariable Long menuId,@RequestBody ProductItemDTO productItemDTO){
+        ResponseDTO<ProductItemDTO> responseDTO = productItemService.create(menuId, productItemDTO);
         if (responseDTO.getHasErrors()) {
             return ResponseEntity.badRequest().body(responseDTO.getObject());
         }
         return ResponseEntity.ok(responseDTO.getObject());
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @GetMapping("/{id}")
+    public ProductItemDTO getProductById(
+            @PathVariable Long id){
+        return productItemService.getById(id);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
@@ -47,5 +55,12 @@ public class ProductItemController {
             return ResponseEntity.badRequest().body(responseDTO.getObject());
         }
         return ResponseEntity.ok(responseDTO.getObject());
+    }
+
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteProductById(
+            @PathVariable Long id){
+        return productItemService.deleteById(id);
     }
 }

@@ -1,48 +1,25 @@
 package com.example.asadmin.dto;
 
 import com.example.asadmin.enumeration.OrderStatus;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.time.ZonedDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
+@Setter
+@Getter
 public class OrderDTO {
 
     private Long id;
 
     private OrderStatus orderStatus;
 
-    private ZonedDateTime dateOfCreation;
+    private String dateOfCreation;
 
-    private DiningSessionDTO diningSessionDTO;
+    private DiningSessionDTO diningSessionDTO = new DiningSessionDTO();
 
-    public Long getId() {
-        return id;
-    }
+    private Set<OrderItemDTO> orderItemDTOS = new HashSet<>();
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public OrderStatus getOrderStatus() {
-        return orderStatus;
-    }
-
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
-    }
-
-    public ZonedDateTime getDateOfCreation() {
-        return dateOfCreation;
-    }
-
-    public void setDateOfCreation(ZonedDateTime dateOfCreation) {
-        this.dateOfCreation = dateOfCreation;
-    }
-
-    public DiningSessionDTO getDiningSessionDTO() {
-        return diningSessionDTO;
-    }
-
-    public void setDiningSessionDTO(DiningSessionDTO diningSessionDTO) {
-        this.diningSessionDTO = diningSessionDTO;
-    }
 }

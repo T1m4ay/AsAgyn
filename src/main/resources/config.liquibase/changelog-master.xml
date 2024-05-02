@@ -24,6 +24,7 @@
     <include file="config.liquibase/changelog/20240228180000_added_entity_Dining_Session.xml" relativeToChangelogFile="false"/>
     <include file="config.liquibase/changelog/20240228190000_added_entity_Order.xml" relativeToChangelogFile="false"/>
     <include file="config.liquibase/changelog/20240301100000_added_entity_Order_Item.xml" relativeToChangelogFile="false"/>
+    <include file="config.liquibase/changelog/20240302100000_added_entity_Photo.xml" relativeToChangelogFile="false"/>
     <include file="/config.liquibase/migration/V1__init.sql" relativeToChangelogFile="false"/>
     <include file="/config.liquibase/migration/V2__init.sql" relativeToChangelogFile="false"/>
     <include file="/config.liquibase/migration/V3__init.sql" relativeToChangelogFile="false"/>

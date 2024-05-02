@@ -1,7 +1,13 @@
 package com.example.asadmin.dto;
 
-import java.math.BigDecimal;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.util.Set;
+
+@Setter
+@Getter
 public class EstablishmentDTO {
 
     private Long id;
@@ -12,35 +18,6 @@ public class EstablishmentDTO {
 
     private String backgroundImage;
 
-    public Long getId() {
-        return id;
-    }
+    private Set<PaymentMethodDTO> paymentMethods;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getEstablishmentName() {
-        return establishmentName;
-    }
-
-    public void setEstablishmentName(String establishmentName) {
-        this.establishmentName = establishmentName;
-    }
-
-    public BigDecimal getServingPercentage() {
-        return servingPercentage;
-    }
-
-    public void setServingPercentage(BigDecimal servingPercentage) {
-        this.servingPercentage = servingPercentage;
-    }
-
-    public String getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public void setBackgroundImage(String backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
 }

@@ -14,13 +14,18 @@
             <column name="start_date_time" type="timestamp">
                 <constraints nullable="true" />
             </column>
+            <column name="is_close" type="boolean" defaultValue="true">
+            </column>
             <column name="establishment_id" type="bigint">
+                <constraints nullable="true" />
+            </column>
+            <column name="user_id" type="bigint">
                 <constraints nullable="true" />
             </column>
         </createTable>
     </changeSet>
 
-    <changeSet id="20240228180000-relations" author="t1m4ay">
+    <changeSet id="20240228180000-1-relations" author="t1m4ay">
         <addForeignKeyConstraint
                 baseTableName="dining_session"
                 baseColumnNames="establishment_id"
@@ -28,5 +33,15 @@
                 referencedTableName="establishment"
                 referencedColumnNames="id"/>
     </changeSet>
+
+    <changeSet id="20240228180000-2-relations" author="t1m4ay">
+        <addForeignKeyConstraint
+                baseTableName="dining_session"
+                baseColumnNames="user_id"
+                constraintName="fk_dining_session_users"
+                referencedTableName="users"
+                referencedColumnNames="id"/>
+    </changeSet>
+
 
 </databaseChangeLog>

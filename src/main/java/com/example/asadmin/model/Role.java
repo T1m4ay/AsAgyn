@@ -1,17 +1,15 @@
 package com.example.asadmin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
 @Data
-public class Role implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Role{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

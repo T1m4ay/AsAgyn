@@ -23,7 +23,7 @@
             <column name="cost" type="integer">
                 <constraints nullable="true" />
             </column>
-            <column name="order_id" type="bigint">
+            <column name="order_entity_id" type="bigint">
                 <constraints nullable="true" />
             </column>
         </createTable>
@@ -32,9 +32,9 @@
     <changeSet id="20240301100000-relations" author="t1m4ay">
         <addForeignKeyConstraint
                 baseTableName="order_item"
-                baseColumnNames="order_id"
-                constraintName="fk_order_item_order"
-                referencedTableName="order"
+                baseColumnNames="order_entity_id"
+                constraintName="fk_order_item_order_entity"
+                referencedTableName="order_entity"
                 referencedColumnNames="id"/>
     </changeSet>
 

@@ -20,6 +20,8 @@
             <column name="email" type="VARCHAR(255)">
                 <constraints nullable="true"/>
             </column>
+            <column name="is_delete" type="boolean" defaultValue="false">
+            </column>
         </createTable>
     </changeSet>
 

@@ -4,11 +4,10 @@ import com.example.asadmin.criteria.BetweenDatesCriteria;
 import com.example.asadmin.criteria.GeneralCriteria;
 import com.example.asadmin.dto.*;
 import com.example.asadmin.mapper.EstablishmentMapper;
-import com.example.asadmin.model.Establishment;
-import com.example.asadmin.model.Order;
-import com.example.asadmin.model.OrderItem;
+import com.example.asadmin.model.*;
 import com.example.asadmin.repository.EstablishmentRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
@@ -17,13 +16,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
 import java.time.Month;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class EstablishmentService {
 
     private final EstablishmentRepository repository;
@@ -31,8 +29,6 @@ public class EstablishmentService {
     private final EstablishmentMapper mapper;
 
     private final UserService userService;
-
-    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
     public Establishment save(Establishment establishment){
         return repository.save(establishment);
@@ -59,16 +55,17 @@ public class EstablishmentService {
     public NumberOrderDTO getNumberOfOrders(
             Long id,
             BetweenDatesCriteria betweenDatesCriteria){
-        Establishment establishment = repository.findById(id).orElse(null);
+        log.info("Between " + betweenDatesCriteria.getStartDate() + " and " + betweenDatesCriteria.getEndDate());
+        Establishment establishment = repository.findAllById(id);
         NumberOrderDTO numberOrderDTO = new NumberOrderDTO();
-        Set<Order> orders = establishment.getDiningSessions()
+        Set<OrderEntity> orderEntities = establishment.getDiningSessions()
                 .stream()
-                .flatMap(d -> d.getOrders()
+                .flatMap(d -> d.getOrderEntities()
                         .stream()
                         .filter(o -> o.getDateOfCreation().isBefore(betweenDatesCriteria.getEndDate())
                                 && o.getDateOfCreation().isAfter(betweenDatesCriteria.getStartDate())))
                 .collect(Collectors.toSet());
-        numberOrderDTO.setCount(orders.size());
+        numberOrderDTO.setCount(orderEntities.size());
         return numberOrderDTO;
 
     }
@@ -76,16 +73,17 @@ public class EstablishmentService {
     public RevenueDTO getRevenue(
             Long id,
             BetweenDatesCriteria betweenDatesCriteria){
-        Establishment establishment = repository.findById(id).orElse(null);
+        log.info("Between " + betweenDatesCriteria.getStartDate() + " and " + betweenDatesCriteria.getEndDate());
+        Establishment establishment = repository.findAllById(id);
         RevenueDTO revenueDTO = new RevenueDTO();
-        Set<Order> orders = establishment.getDiningSessions()
+        Set<OrderEntity> orderEntities = establishment.getDiningSessions()
                 .stream()
-                .flatMap(d -> d.getOrders()
+                .flatMap(d -> d.getOrderEntities()
                         .stream()
                         .filter(o -> o.getDateOfCreation().isBefore(betweenDatesCriteria.getEndDate())
                                 && o.getDateOfCreation().isAfter(betweenDatesCriteria.getStartDate())))
                 .collect(Collectors.toSet());
-        Set<Integer> costs = orders
+        Set<Integer> costs = orderEntities
                 .stream()
                 .flatMap(o -> o.getOrderItems()
                         .stream()
@@ -99,55 +97,48 @@ public class EstablishmentService {
 
     }
 
-    public List<MonthRevenueDTO> getMonthRevenue(Long id){
-        Establishment establishment = repository.findById(id).orElse(null);
-        List<MonthRevenueDTO> monthRevenueDTOS = new ArrayList<>();
-        for(Month month : Month.values()){
-            Set<Order> orders = establishment.getDiningSessions()
-                    .stream()
-                    .flatMap(d -> d.getOrders()
-                            .stream()
-                            .filter(o -> o.getDateOfCreation().getMonth() == month))
-                    .collect(Collectors.toSet());
-            if (!ObjectUtils.isEmpty(orders)) {
-                Set<Integer> costs = orders
-                        .stream()
-                        .flatMap(o -> o.getOrderItems()
-                                .stream()
-                                .map(OrderItem::getCost))
-                        .collect(Collectors.toSet());
-                int sum = costs.stream()
-                        .mapToInt(Integer::intValue)
-                        .sum();
-                MonthRevenueDTO monthRevenueDTO = new MonthRevenueDTO();
-                monthRevenueDTO.setSum(sum);
-                monthRevenueDTO.setMonth(month.toString());
+    public Map<Month, Integer> getMonthRevenue(Long id) {
+        Establishment establishment = repository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Establishment not found"));
 
-                monthRevenueDTOS.add(monthRevenueDTO);
-            }
+        Map<Month, Integer> monthRevenueMap = new HashMap<>();
+
+        for (Month month : Month.values()) {
+            int sum = establishment.getDiningSessions().stream()
+                    .flatMap(diningSession -> diningSession.getOrderEntities().stream())
+                    .filter(order -> order.getDateOfCreation().getMonth() == month)
+                    .flatMapToInt(order -> order.getOrderItems().stream().mapToInt(OrderItem::getCost))
+                    .sum();
+
+            monthRevenueMap.put(month, sum);
         }
 
-        return monthRevenueDTOS;
+        return monthRevenueMap;
     }
 
     public Establishment findById(Long id){
-        return repository.findById(id).orElse(null);
+        Establishment establishment = repository.findAllById(id);
+        return establishment;
     }
 
     public EstablishmentDTO findEstablishmentDTOById(Long id){
-        return mapper.toDTO(repository.findById(id).orElse(null));
+        return mapper.toDTO(repository.findAllById(id));
     }
 
-    public EstablishmentDTO create(EstablishmentDTO establishmentDTO){
+    public Long create(EstablishmentDTO establishmentDTO){
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        System.out.println("String currentUser: " + currentUser);
         Establishment establishment = mapper.toEntity(establishmentDTO);
-        establishment.setUser(userService.findByUsername(authentication.getName()).orElse(null));
-        return mapper.toDTO(repository.save(establishment));
+        establishment.setUser(userService.findByUsername(currentUser).orElse(null));
+        return repository.save(establishment).getId();
     }
 
     public EstablishmentDTO getEstablishment(){
+        String currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+        System.out.println("String currentUser: " + currentUser);
         return mapper.toDTO(
                 repository.findAllByUser(
-                        userService.findByUsername(authentication.getName()).orElse(null)
+                        userService.findByUsername(currentUser).orElse(null)
                 ));
     }
 }

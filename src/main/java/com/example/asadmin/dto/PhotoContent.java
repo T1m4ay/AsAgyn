@@ -5,10 +5,11 @@ import lombok.Setter;
 
 @Setter
 @Getter
-public class NumberOrderDTO {
+public class PhotoContent {
 
-    private Long id;
+    String contentType;
 
-    private int count;
+    byte[] bytes;
 
+    String originalFilename;
 }

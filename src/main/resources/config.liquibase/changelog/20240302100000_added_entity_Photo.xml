@@ -6,25 +6,30 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.5.xsd
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
-    <changeSet id="20240228150000" author="t1m4ay">
-        <createTable tableName="menu">
+    <changeSet id="20240302100000" author="t1m4ay">
+        <createTable tableName="photo_table">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
-            <column name="establishment_id" type="bigint">
+            <column name="input_dir" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="filename" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="original_filename" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="url" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="content_type" type="varchar(255)">
+                <constraints nullable="true" />
+            </column>
+            <column name="filepath" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
         </createTable>
-    </changeSet>
-
-    <changeSet id="20240228150000-relations" author="t1m4ay">
-        <addForeignKeyConstraint
-                baseTableName="menu"
-                baseColumnNames="establishment_id"
-                constraintName="fk_menu_establishment"
-                referencedTableName="establishment"
-                referencedColumnNames="id"
-                onDelete="CASCADE"/>
     </changeSet>
 
 </databaseChangeLog>

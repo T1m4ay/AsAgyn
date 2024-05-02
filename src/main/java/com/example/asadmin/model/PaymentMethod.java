@@ -1,18 +1,13 @@
 package com.example.asadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name = "payment_method")
-@DynamicUpdate
-@DynamicInsert
-public class PaymentMethod implements Serializable {
+public class PaymentMethod{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

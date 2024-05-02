@@ -20,7 +20,16 @@
             <column name="background_image" type="varchar(255)">
                 <constraints nullable="true" />
             </column>
+            <column name="user_id" type="bigint">
+                <constraints nullable="true"/>
+            </column>
         </createTable>
+    </changeSet>
+
+    <changeSet id="20240216172200-2" author="t1m4ay">
+        <addForeignKeyConstraint baseTableName="establishment" baseColumnNames="user_id"
+                                 constraintName="fk_establishment_users" referencedTableName="users"
+                                 referencedColumnNames="id" />
     </changeSet>
 
 </databaseChangeLog>

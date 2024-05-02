@@ -7,7 +7,7 @@
                         http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
 
     <changeSet id="20240228190000" author="t1m4ay">
-        <createTable tableName="order">
+        <createTable tableName="order_entity">
             <column name="id" type="bigint" autoIncrement="true">
                 <constraints primaryKey="true" nullable="false" />
             </column>
@@ -25,9 +25,9 @@
 
     <changeSet id="20240228190000-relations" author="t1m4ay">
         <addForeignKeyConstraint
-                baseTableName="order"
+                baseTableName="order_entity"
                 baseColumnNames="dining_session_id"
-                constraintName="fk_order_dining_session"
+                constraintName="fk_order_entity_dining_session"
                 referencedTableName="dining_session"
                 referencedColumnNames="id"/>
     </changeSet>

@@ -1,20 +1,16 @@
 package com.example.asadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "menu")
-@DynamicUpdate
-@DynamicInsert
-public class Menu implements Serializable {
+public class Menu{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -28,7 +24,7 @@ public class Menu implements Serializable {
     @OneToMany(mappedBy = "menu", fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "menu")
-    private List<ProductItem> productItems;
+    private Set<ProductItem> productItems;
 
     public Long getId() {
         return id;
@@ -46,11 +42,15 @@ public class Menu implements Serializable {
         this.establishment = establishment;
     }
 
-    public List<ProductItem> getProductItems() {
+    public Set<ProductItem> getProductItems() {
         return productItems;
     }
 
-    public void setProductItems(List<ProductItem> productItems) {
+    public void setProductItems(Set<ProductItem> productItems) {
+        if(this.productItems == null){
+            this.productItems = new HashSet<>();
+        }
         this.productItems = productItems;
     }
+
 }

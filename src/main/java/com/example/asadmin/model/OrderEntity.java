@@ -1,39 +1,37 @@
 package com.example.asadmin.model;
 
 import com.example.asadmin.enumeration.OrderStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "order")
-@DynamicUpdate
-@DynamicInsert
-public class Order implements Serializable {
+@Table(name = "order_entity")
+public class OrderEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
+    @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private OrderStatus orderStatus;
+    private OrderStatus status;
 
     @Column(name = "date_of_creation")
     private ZonedDateTime dateOfCreation;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"orderEntities"})
     private DiningSession diningSession;
 
-    @OneToMany(mappedBy = "order", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "orderEntity", fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
     @JsonIgnoreProperties(value = "order")
     private Set<OrderItem> orderItems;
@@ -47,11 +45,11 @@ public class Order implements Serializable {
     }
 
     public OrderStatus getOrderStatus() {
-        return orderStatus;
+        return status;
     }
 
-    public void setOrderStatus(OrderStatus orderStatus) {
-        this.orderStatus = orderStatus;
+    public void setOrderStatus(OrderStatus status) {
+        this.status = status;
     }
 
     public ZonedDateTime getDateOfCreation() {

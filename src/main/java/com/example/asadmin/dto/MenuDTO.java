@@ -1,24 +1,17 @@
 package com.example.asadmin.dto;
 
+import lombok.Getter;
+import lombok.Setter;
+
+import java.util.Set;
+
+@Setter
+@Getter
 public class MenuDTO {
 
     private Long id;
 
     private EstablishmentDTO establishmentDTO;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public EstablishmentDTO getEstablishmentDTO() {
-        return establishmentDTO;
-    }
-
-    public void setEstablishmentDTO(EstablishmentDTO establishmentDTO) {
-        this.establishmentDTO = establishmentDTO;
-    }
+    private Set<ProductItemDTO> productItemDTOs;
 }

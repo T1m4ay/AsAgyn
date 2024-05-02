@@ -1,22 +1,17 @@
 package com.example.asadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "dining_session")
-@DynamicUpdate
-@DynamicInsert
-public class DiningSession implements Serializable {
+public class DiningSession {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -26,13 +21,20 @@ public class DiningSession implements Serializable {
     @Column(name = "start_date_time")
     private ZonedDateTime startDateTime;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @Column(name = "is_close")
+    private Boolean isClose;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties(value = {"diningSessions", "user"})
     private Establishment establishment;
 
     @OneToMany(mappedBy = "diningSession", fetch = FetchType.EAGER)
     @NotFound(action = NotFoundAction.IGNORE)
-    @JsonIgnoreProperties(value = "diningSession")
-    private Set<Order> orders;
+    @JsonIgnoreProperties(value = {"diningSession"})
+    private Set<OrderEntity> orderEntities = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    private User user;
 
     public Long getId() {
         return id;
@@ -58,14 +60,30 @@ public class DiningSession implements Serializable {
         this.establishment = establishment;
     }
 
-    public Set<Order> getOrders() {
-        return orders;
+    public Set<OrderEntity> getOrderEntities() {
+        return orderEntities;
     }
 
-    public void setOrders(Set<Order> orders) {
-        if(this.orders == null){
-            this.orders = new HashSet<>();
+    public void setOrderEntities(Set<OrderEntity> orderEntities) {
+        if(this.orderEntities == null){
+            this.orderEntities = new HashSet<>();
         }
-        this.orders = orders;
+        this.orderEntities = orderEntities;
+    }
+
+    public Boolean getClose() {
+        return isClose;
+    }
+
+    public void setClose(Boolean close) {
+        isClose = close;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

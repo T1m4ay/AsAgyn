@@ -1,11 +1,8 @@
 package com.example.asadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
@@ -13,9 +10,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "product_item")
-@DynamicUpdate
-@DynamicInsert
-public class ProductItem implements Serializable {
+public class ProductItem{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

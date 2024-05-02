@@ -1,5 +1,6 @@
 package com.example.asadmin.api;
 
+import com.example.asadmin.dto.EstablishmentDTO;
 import com.example.asadmin.dto.MenuDTO;
 import com.example.asadmin.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,15 +14,15 @@ public class MenuController {
     @Autowired
     MenuService menuService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CUSTOMER')")
     @GetMapping("/{establishmentId}")
     public MenuDTO getMenu(@PathVariable Long establishmentId){
         return menuService.findByEstablishmentId(establishmentId);
     }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    @PostMapping("/{establishmentId}")
-    public MenuDTO createMenu(@PathVariable Long establishmentId){
-        return menuService.create(establishmentId);
+    @PostMapping("")
+    public MenuDTO createMenu(@RequestBody EstablishmentDTO establishmentDTO){
+        return menuService.create(establishmentDTO);
     }
 }

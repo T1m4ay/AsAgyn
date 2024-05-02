@@ -1,22 +1,13 @@
 package com.example.asadmin.model;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "tables")
-@DynamicUpdate
-@DynamicInsert
-public class Tables implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class Tables{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "s_tables")
-    @SequenceGenerator(name = "s_tables", allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", table = "tables")
     private Long id;
 

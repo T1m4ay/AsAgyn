@@ -6,19 +6,27 @@ import com.example.asadmin.dto.PageResponse;
 import com.example.asadmin.dto.ProductItemDTO;
 import com.example.asadmin.dto.ResponseDTO;
 import com.example.asadmin.mapper.CategoryMapper;
+import com.example.asadmin.mapper.MenuMapper;
 import com.example.asadmin.mapper.ProductItemMapper;
+import com.example.asadmin.model.Categories;
+import com.example.asadmin.model.Menu;
 import com.example.asadmin.model.ProductItem;
 import com.example.asadmin.repository.ProductItemRepository;
 import com.example.asadmin.validator.ProductItemValidator;
 import com.example.asadmin.validator.ValidatorResponse;
+import com.example.asadmin.web.rest.confirm.AppMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,6 +36,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductItemService {
 
     private final ProductItemRepository repository;
@@ -39,14 +48,15 @@ public class ProductItemService {
     private final CategoryMapper categoryMapper;
 
     private final MenuService menuService;
+    private final MenuMapper menuMapper;
 
     public ProductItem save(ProductItem productItem){
         return repository.save(productItem);
     }
 
-    public PageResponse<ProductItemDTO> getAll(ProductItemCriteria criteria, Set<String> sort){
+    public PageResponse<ProductItemDTO> getAll(ProductItemCriteria criteria, Set<String> sort, Long menuId){
         Sort sortBy = createSortFromStringSet(sort);
-        Specification<ProductItem> specification = createSpecification(criteria);
+        Specification<ProductItem> specification = createSpecification(criteria, menuId);
 
         Page<ProductItem> productItemPage = repository.findAll(
                 specification,
@@ -60,14 +70,18 @@ public class ProductItemService {
         return pageResponse;
     }
 
-    public Specification<ProductItem> createSpecification(ProductItemCriteria criteria){
+    public Specification<ProductItem> createSpecification(ProductItemCriteria criteria, Long menuId){
         return (root, criteriaQuery, criteriaBuilder) -> {
             List<Predicate> predicates = new ArrayList<>();
-            if (criteria.getCategories() != null) {
-                predicates.add(criteriaBuilder.equal(root.get("status"), criteria.getCategories()));
+            if (criteria.getCategoryDTO() != null) {
+                log.info("criteria.getCategoryDTO() not null");
+                Join<ProductItem, Categories> categoriesJoin = root.join("categories", JoinType.INNER);
+                predicates.add(criteriaBuilder.equal(categoriesJoin.get("name") , criteria.getCategoryDTO().getName()));
             }
             if (criteria.getQuery() != null) {
+                log.info("criteria.getQuery() not null");
                 if (!criteria.getQuery().trim().isEmpty()) {
+                    log.info("criteria.getQuery().trim().isEmpty() not null");
                     Predicate nameRuPredicate = criteriaBuilder.like(
                             criteriaBuilder.lower(root.get("nameRu")),
                             "%" + criteria.getQuery().toLowerCase() + "%");
@@ -77,6 +91,8 @@ public class ProductItemService {
                     predicates.add(criteriaBuilder.or(nameRuPredicate,descriptionPredicate));
                 }
             }
+            Join<ProductItem, Menu> menuJoin = root.join("menu");
+            predicates.add(criteriaBuilder.and(menuJoin.get("id").in(menuId)));
             return criteriaBuilder.and(predicates.toArray(new Predicate[0]));
         };
     }
@@ -131,7 +147,7 @@ public class ProductItemService {
         return sortBy;
     }
 
-    public ResponseDTO<ProductItemDTO> create(ProductItemDTO productItemDTO){
+    public ResponseDTO<ProductItemDTO> create(Long menuId, ProductItemDTO productItemDTO){
         productItemDTO.setId(null);
         ValidatorResponse<ProductItemDTO> validatorResponse = productItemValidator.validate(productItemDTO);
         ResponseDTO<ProductItemDTO> responseDTO = new ResponseDTO<>();
@@ -141,7 +157,10 @@ public class ProductItemService {
         responseDTO.setHasErrors(validatorResponse.isHasErrors());
 
         if(!responseDTO.getHasErrors()) {
-            repository.save(mapper.toEntity(productItemDTO));
+            ProductItem productItem = mapper.toEntity(productItemDTO);
+            productItem.setMenu(menuMapper.toEntity(menuService.findById(menuId)));
+
+            repository.save(productItem);
         }
 
         return responseDTO;
@@ -189,11 +208,20 @@ public class ProductItemService {
         if(!ObjectUtils.isEmpty(productItemDTO.getEndAvailableTime())){
             productItem.setEndAvailableTime(productItemDTO.getEndAvailableTime());
         }
-        if(!ObjectUtils.isEmpty(productItemDTO.getCategories())){
-            productItem.setCategories(categoryMapper.toEntities(productItemDTO.getCategories()));
+        if(!ObjectUtils.isEmpty(productItemDTO.getCategoryDTOS())){
+            productItem.setCategories(categoryMapper.toEntities(productItemDTO.getCategoryDTOS()));
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getImageUrl())){
             productItem.setImageUrl(productItemDTO.getImageUrl());
         }
+    }
+
+    public ProductItemDTO getById(Long id){
+        return mapper.toDto(repository.getById(id));
+    }
+
+    public ResponseEntity<?> deleteById(Long id){
+        repository.deleteById(id);
+        return ResponseEntity.ok(new AppMessage("Удаление товара с id " + " прошла успешно"));
     }
 }

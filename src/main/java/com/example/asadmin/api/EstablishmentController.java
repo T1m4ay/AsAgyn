@@ -8,7 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.Month;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(value = "/api/establishment")
@@ -29,11 +31,11 @@ public class EstablishmentController {
         return service.findEstablishmentDTOById(id);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
-    @PostMapping("")
-    public EstablishmentDTO createEstablishment(EstablishmentDTO establishmentDTO){
-        return service.create(establishmentDTO);
-    }
+//    @PreAuthorize("hasAnyRole('ROLE_USER')")
+//    @PostMapping("")
+//    public EstablishmentDTO createEstablishment(@RequestBody EstablishmentDTO establishmentDTO){
+//        return service.create(establishmentDTO);
+//    }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all")
@@ -59,7 +61,7 @@ public class EstablishmentController {
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
     @GetMapping("/revenue-every-month-period/{id}")
-    public List<MonthRevenueDTO> getRevenueEveryMonthPeriod(@PathVariable Long id){
+    public Map<Month, Integer> getRevenueEveryMonthPeriod(@PathVariable Long id){
         return service.getMonthRevenue(id);
     }
 }

@@ -1,16 +1,10 @@
 package com.example.asadmin.model;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
-
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "table_category")
-@DynamicUpdate
-@DynamicInsert
-public class TableCategory implements Serializable {
+public class TableCategory{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

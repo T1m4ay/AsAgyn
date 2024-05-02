@@ -4,6 +4,8 @@ import com.example.asadmin.dto.DiningSessionDTO;
 import com.example.asadmin.model.DiningSession;
 import org.springframework.stereotype.Component;
 
+import java.time.ZonedDateTime;
+
 @Component
 public class DiningSessionMapper {
 
@@ -22,7 +24,8 @@ public class DiningSessionMapper {
 
         diningSessionDTO.setId(diningSession.getId());
         diningSessionDTO.setEstablishmentDTO(establishmentMapper.toDTO(diningSession.getEstablishment()));
-        diningSessionDTO.setStartDateTime(diningSession.getStartDateTime());
+        diningSessionDTO.setStartDateTime(diningSession.getStartDateTime().toString());
+        diningSessionDTO.setClose(diningSession.getClose());
 
         return diningSessionDTO;
     }
@@ -35,8 +38,11 @@ public class DiningSessionMapper {
         DiningSession diningSession = new DiningSession();
 
         diningSession.setId(diningSessionDTO.getId());
-        diningSession.setEstablishment(establishmentMapper.toEntity(diningSessionDTO.getEstablishmentDTO()));
-        diningSession.setStartDateTime(diningSessionDTO.getStartDateTime());
+        if(diningSessionDTO.getEstablishmentDTO() != null && diningSessionDTO.getEstablishmentDTO().getId() != null) {
+            diningSession.setEstablishment(establishmentMapper.toEntity(diningSessionDTO.getEstablishmentDTO()));
+        }
+        diningSession.setStartDateTime(ZonedDateTime.parse(diningSessionDTO.getStartDateTime()));
+        diningSession.setClose(diningSessionDTO.getClose());
 
         return diningSession;
     }

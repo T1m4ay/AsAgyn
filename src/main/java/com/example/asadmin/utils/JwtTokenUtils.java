@@ -3,6 +3,7 @@ package com.example.asadmin.utils;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@Slf4j
 public class JwtTokenUtils {
     @Value("${jwt.secret}")
     private String secret;

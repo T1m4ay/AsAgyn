@@ -1,9 +1,11 @@
 package com.example.asadmin.service;
 
+import com.example.asadmin.dto.EstablishmentDTO;
 import com.example.asadmin.dto.MenuDTO;
 import com.example.asadmin.mapper.MenuMapper;
 import com.example.asadmin.model.Menu;
 import com.example.asadmin.repository.MenuRepository;
+import com.sun.xml.bind.v2.model.core.ID;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,14 +24,15 @@ public class MenuService {
     }
 
     public MenuDTO findByEstablishmentId(Long establishmentId){
-        return mapper.toDTO(repository.findAllByEstablishmentId(establishmentId));
+        return mapper.toDTO(repository.findByEstablishment(establishmentService.findById(establishmentId)));
     }
 
     public MenuDTO findById(Long id){
-        return mapper.toDTO(repository.findById(id).orElse(null));
+        return mapper.toDTO(repository.findAllById(id));
     }
 
-    public MenuDTO create(Long establishmentId){
+    public MenuDTO create(EstablishmentDTO establishmentDTO){
+        Long establishmentId = establishmentService.create(establishmentDTO);
         Menu menu = new Menu();
         menu.setEstablishment(establishmentService.findById(establishmentId));
         return mapper.toDTO(repository.save(menu));

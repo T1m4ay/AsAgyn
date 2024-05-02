@@ -1,10 +1,12 @@
 package com.example.asadmin.service;
 
 import com.example.asadmin.dto.RegistrationUserDto;
+import com.example.asadmin.dto.ResetPasswordDto;
 import com.example.asadmin.model.User;
 import com.example.asadmin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -61,5 +63,25 @@ public class UserService implements UserDetailsService {
         user.setPassword(passwordEncoder.encode(registrationUserDto.getPassword()));
         user.setRoles(List.of(roleService.getUserRole()));
         return userRepository.save(user);
+    }
+
+    public User changePassword(Optional<User> optionalUser, ResetPasswordDto resetPasswordDto){
+        User user = optionalUser.get();
+        user.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+
+        return userRepository.save(user);
+    }
+
+    public User changeEmail(Optional<User> optionalUser, ResetPasswordDto resetPasswordDto){
+        User user = optionalUser.get();
+        user.setEmail(resetPasswordDto.getEmail());
+
+        return userRepository.save(user);
+    }
+
+    public User getCurrentUser(){
+        return userRepository
+                .findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString())
+                .orElse(null);
     }
 }

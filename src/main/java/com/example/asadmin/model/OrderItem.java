@@ -1,16 +1,12 @@
 package com.example.asadmin.model;
 
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
-import java.io.Serializable;
 
 @Entity
 @Table(name = "order_item")
-@DynamicUpdate
-@DynamicInsert
-public class OrderItem implements Serializable {
+public class OrderItem {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +26,9 @@ public class OrderItem implements Serializable {
     private int cost;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    Order order;
+    @JsonIgnoreProperties(value = { "orderItems" }, allowSetters = true)
+    @JoinColumn(name = "order_entity_id")
+    private OrderEntity orderEntity;
 
     public Long getId() {
         return id;
@@ -72,11 +70,11 @@ public class OrderItem implements Serializable {
         this.cost = cost;
     }
 
-    public Order getOrder() {
-        return order;
+    public OrderEntity getOrder() {
+        return orderEntity;
     }
 
-    public void setOrder(Order order) {
-        this.order = order;
+    public void setOrder(OrderEntity orderEntity) {
+        this.orderEntity = orderEntity;
     }
 }

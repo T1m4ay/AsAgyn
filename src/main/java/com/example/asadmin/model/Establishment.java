@@ -1,23 +1,18 @@
 package com.example.asadmin.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 import org.hibernate.annotations.NotFound;
 import org.hibernate.annotations.NotFoundAction;
-import org.springframework.lang.Nullable;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "establishment")
-@DynamicUpdate
-@DynamicInsert
-public class Establishment implements Serializable {
+public class Establishment{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +28,18 @@ public class Establishment implements Serializable {
     @Column(name = "background_image")
     private String backgroundImage;
 
-    @OneToMany(mappedBy = "establishment", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "establishment", fetch = FetchType.LAZY)
     @NotFound(action = NotFoundAction.IGNORE)
-    @JsonIgnoreProperties(value = "establishment")
+    @JsonIgnoreProperties(value = {"establishment"})
     private Set<DiningSession> diningSessions;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(unique = true)
     private User user;
+
+    @ManyToMany(mappedBy = "establishments")
+    @JsonIgnoreProperties(value = "establishment", allowSetters = true)
+    private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     public Long getId() {
         return id;
@@ -91,5 +90,13 @@ public class Establishment implements Serializable {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public Set<PaymentMethod> getPaymentMethods() {
+        return paymentMethods;
+    }
+
+    public void setPaymentMethods(Set<PaymentMethod> paymentMethods) {
+        this.paymentMethods = paymentMethods;
     }
 }

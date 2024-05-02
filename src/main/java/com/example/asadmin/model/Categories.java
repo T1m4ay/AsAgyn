@@ -1,19 +1,14 @@
 package com.example.asadmin.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "categories")
-@DynamicUpdate
-@DynamicInsert
-public class Categories implements Serializable {
+public class Categories{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
