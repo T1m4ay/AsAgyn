@@ -17,6 +17,8 @@ public class DiningSessionDTO {
 
     private UserDto userDto;
 
+    private OrderDTO orderDTO;
+
     public Long getId() {
         return id;
     }

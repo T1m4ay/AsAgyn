@@ -8,17 +8,36 @@ spring:
   datasource:
     url: jdbc:postgresql://localhost:5432/asagyn
     password: 123456
-    username: suppliers_portal
+    username: admin
   jpa:
     hibernate:
       ddl-auto: none
     show-sql: false
+    properties:
+      hibernate.jdbc.time_zone: GMT+5
   liquibase:
     change-log: classpath:/config.liquibase/changelog-master.xml
   messages:
     basename: i18n/messages
     mvc:
       locale: ru_RU
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: asagyndelivery@gmail.com
+    password: "yfao zubq usqi qmox"
+    properties:
+      mail:
+        smtp:
+          ssl:
+            trust: "*"
+          auth: true
+          starttls:
+            enable: true
+          connection-timeout: 5000
+          timeout: 3000
+          write timeout: 5000
+
 
 jwt:
   secret: 984hg493gh0439rthr0429uruj2309yh937gc763fe87t3f89723gf

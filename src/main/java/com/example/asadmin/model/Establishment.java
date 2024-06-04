@@ -37,8 +37,12 @@ public class Establishment{
     @JoinColumn(unique = true)
     private User user;
 
-    @ManyToMany(mappedBy = "establishments")
-    @JsonIgnoreProperties(value = "establishment", allowSetters = true)
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "rel_payment_method__establishment",
+            joinColumns = @JoinColumn(name = "establishment_id"),
+            inverseJoinColumns = @JoinColumn(name = "payment_method_id")
+    )
     private Set<PaymentMethod> paymentMethods = new HashSet<>();
 
     public Long getId() {

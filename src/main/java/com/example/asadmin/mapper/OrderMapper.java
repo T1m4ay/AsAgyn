@@ -41,6 +41,8 @@ public class OrderMapper {
 
     public OrderEntity toEntity(OrderDTO orderDTO){
         OrderEntity orderEntity = new OrderEntity();
+
+        orderEntity.setId(orderDTO.getId());
         if(!ObjectUtils.isEmpty(orderDTO.getDiningSessionDTO()) && orderDTO.getDiningSessionDTO().getId() != null){
             orderEntity.setDiningSession(diningSessionMapper.toEntity(orderDTO.getDiningSessionDTO()));
         }

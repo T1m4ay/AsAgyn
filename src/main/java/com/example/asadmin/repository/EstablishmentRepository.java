@@ -12,4 +12,3 @@ public interface EstablishmentRepository extends JpaRepository<Establishment, Lo
 
     Establishment findAllById(Long id);
 }
-

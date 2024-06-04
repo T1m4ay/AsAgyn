@@ -4,6 +4,8 @@ import com.example.asadmin.dto.ProductItemDTO;
 import com.example.asadmin.model.ProductItem;
 import org.springframework.stereotype.Component;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -25,12 +27,16 @@ public class ProductItemMapper {
         productItemDTO.setNameRu(productItem.getNameRu());
         productItemDTO.setNameEn(productItem.getNameEn());
         productItemDTO.setNameKz(productItem.getNameKz());
-        productItemDTO.setReadyDuration(productItem.getReadyDuration());
+        productItemDTO.setReadyDuration(productItem.getReadyDuration().toSeconds());
         productItemDTO.setMinAge(productItem.getMinAge());
         productItemDTO.setCost(productItem.getCost());
         productItemDTO.setDescription(productItem.getDescription());
-        productItemDTO.setStartAvailableTime(productItem.getStartAvailableTime());
-        productItemDTO.setEndAvailableTime(productItem.getEndAvailableTime());
+        if (productItem.getStartAvailableTime() != null) {
+            productItemDTO.setStartAvailableTime(productItem.getStartAvailableTime().toString());
+        }
+        if (productItem.getEndAvailableTime() != null) {
+            productItemDTO.setEndAvailableTime(productItem.getEndAvailableTime().toString());
+        }
         productItemDTO.setCategoryDTOS(categoryMapper.toDtos(productItem.getCategories()));
         productItemDTO.setImageUrl(productItem.getImageUrl());
 
@@ -47,12 +53,16 @@ public class ProductItemMapper {
         productItem.setNameRu(productItemDTO.getNameRu());
         productItem.setNameEn(productItemDTO.getNameEn());
         productItem.setNameKz(productItemDTO.getNameKz());
-        productItem.setReadyDuration(productItemDTO.getReadyDuration());
+        productItem.setReadyDuration(Duration.ofSeconds(productItemDTO.getReadyDuration()));
         productItem.setMinAge(productItemDTO.getMinAge());
         productItem.setCost(productItemDTO.getCost());
         productItem.setDescription(productItemDTO.getDescription());
-        productItem.setStartAvailableTime(productItemDTO.getStartAvailableTime());
-        productItem.setEndAvailableTime(productItemDTO.getEndAvailableTime());
+        if (productItemDTO.getStartAvailableTime() != null) {
+            productItem.setStartAvailableTime(ZonedDateTime.parse(productItemDTO.getStartAvailableTime()));
+        }
+        if (productItemDTO.getEndAvailableTime() != null) {
+            productItem.setEndAvailableTime(ZonedDateTime.parse(productItemDTO.getEndAvailableTime()));
+        }
         productItem.setCategories(categoryMapper.toEntities(productItemDTO.getCategoryDTOS()));
         productItem.setImageUrl(productItemDTO.getImageUrl());
 
@@ -71,12 +81,16 @@ public class ProductItemMapper {
             productItemDTO.setNameRu(productItem.getNameRu());
             productItemDTO.setNameEn(productItem.getNameEn());
             productItemDTO.setNameKz(productItem.getNameKz());
-            productItemDTO.setReadyDuration(productItem.getReadyDuration());
+            productItemDTO.setReadyDuration(productItem.getReadyDuration().toSeconds());
             productItemDTO.setMinAge(productItem.getMinAge());
             productItemDTO.setCost(productItem.getCost());
             productItemDTO.setDescription(productItem.getDescription());
-            productItemDTO.setStartAvailableTime(productItem.getStartAvailableTime());
-            productItemDTO.setEndAvailableTime(productItem.getEndAvailableTime());
+            if (productItem.getStartAvailableTime() != null) {
+                productItemDTO.setStartAvailableTime(productItem.getStartAvailableTime().toString());
+            }
+            if(productItem.getEndAvailableTime() != null) {
+                productItemDTO.setEndAvailableTime(productItem.getEndAvailableTime().toString());
+            }
             productItemDTO.setCategoryDTOS(categoryMapper.toDtos(productItem.getCategories()));
             productItemDTO.setImageUrl(productItem.getImageUrl());
             productItemDTOs.add(productItemDTO);

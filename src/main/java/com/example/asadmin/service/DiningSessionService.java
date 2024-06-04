@@ -1,10 +1,13 @@
 package com.example.asadmin.service;
 
 import com.example.asadmin.dto.DiningSessionDTO;
+import com.example.asadmin.dto.PaymentMethodDTO;
+import com.example.asadmin.dto.RequestToCloseDTO;
 import com.example.asadmin.mapper.DiningSessionMapper;
 import com.example.asadmin.model.DiningSession;
 import com.example.asadmin.repository.DiningSessionRepository;
 import com.pusher.rest.Pusher;
+import com.pusher.rest.data.Result;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
@@ -55,7 +58,7 @@ public class DiningSessionService {
         return dto;
     }
 
-    public List<DiningSessionDTO> getCurrentSessions(){
+    public List<DiningSessionDTO> getCurrentUserSessions(){
         List<DiningSession> diningSessions = repository
                 .findAllByUserId(userService.getCurrentUser().getId());
         return diningSessions.stream().map(mapper::toDTO).collect(Collectors.toList());
@@ -76,10 +79,29 @@ public class DiningSessionService {
                 "AsAgyn-channel",
                 "close-dining-session",
                 Collections.singletonMap("closed-session", mapper.toDTO(diningSession)));
+        repository.save(diningSession);
         return mapper.toDTO(diningSession);
     }
 
     public List<DiningSessionDTO> getAllDiningSessionByEstablishmentId(Long establishmentId){
         return repository.findAllByEstablishment_Id(establishmentId).stream().map(mapper::toDTO).collect(Collectors.toList());
+    }
+
+    public DiningSessionDTO closeDiningSessionByCustomer(Long id, PaymentMethodDTO paymentMethodDTO){
+        DiningSession diningSession = repository.getById(id);
+        diningSession.setClose(true);
+        Pusher pusher = new Pusher("1783988", "1b1aac5f3ed531c5e179", "d6eafbe9223fb0184c85");
+        pusher.setCluster("ap2");
+        pusher.setEncrypted(true);
+
+        RequestToCloseDTO requestToCloseDTO = new RequestToCloseDTO();
+        requestToCloseDTO.setDiningSessionDTO(mapper.toDTO(diningSession));
+        requestToCloseDTO.setPaymentMethodDTO(paymentMethodDTO);
+
+        pusher.trigger(
+                "AsAgyn-channel",
+                "request-to-close-dining-session",
+                Collections.singletonMap("requestToSession", requestToCloseDTO));
+        return mapper.toDTO(diningSession);
     }
 }

@@ -27,7 +27,6 @@ public class MenuMapper {
         MenuDTO menuDTO = new MenuDTO();
 
         menuDTO.setId(menu.getId());
-        menuDTO.setEstablishmentDTO(establishmentMapper.toDTO(menu.getEstablishment()));
         if(menu.getProductItems() != null){
             menuDTO.setProductItemDTOs(productItemMapper.toDtos(menu.getProductItems()));
         }
@@ -43,7 +42,6 @@ public class MenuMapper {
         Menu menu = new Menu();
 
         menu.setId(menuDTO.getId());
-        menu.setEstablishment(establishmentMapper.toEntity(menuDTO.getEstablishmentDTO()));
 
         return menu;
     }

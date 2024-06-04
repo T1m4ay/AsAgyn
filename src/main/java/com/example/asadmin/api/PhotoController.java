@@ -4,11 +4,11 @@ import com.example.asadmin.dto.PhotoContent;
 import com.example.asadmin.dto.PhotoDTO;
 import com.example.asadmin.dto.UploadPhotoDTO;
 import com.example.asadmin.service.PhotoService;
-import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.FileNotFoundException;
@@ -21,11 +21,13 @@ public class PhotoController {
     @Autowired
     PhotoService photoService;
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST', 'ROLE_CUSTOMER')")
     @PostMapping(value = "/upload-photo", consumes = "multipart/form-data")
     public PhotoDTO uploadImage(@ModelAttribute UploadPhotoDTO uploadPhotoDTO) {
         return photoService.uploadPhoto(uploadPhotoDTO);
     }
 
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_GUEST', 'ROLE_CUSTOMER')")
     @GetMapping("/get-photo-content/{id}")
     public ResponseEntity getImage(@PathVariable Long id) throws IOException{
         PhotoContent photoContent = photoService.getImageContent(id);

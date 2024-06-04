@@ -20,4 +20,6 @@ public class EstablishmentDTO {
 
     private Set<PaymentMethodDTO> paymentMethods;
 
+    private MenuDTO menuDTO;
+
 }

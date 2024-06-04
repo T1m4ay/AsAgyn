@@ -1,7 +1,7 @@
 package com.example.asadmin.service;
 
 import com.example.asadmin.dto.RegistrationUserDto;
-import com.example.asadmin.dto.ResetPasswordDto;
+import com.example.asadmin.dto.UpdateProfileDTO;
 import com.example.asadmin.model.User;
 import com.example.asadmin.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,6 +43,10 @@ public class UserService implements UserDetailsService {
         return userRepository.findByUsername(username);
     }
 
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
@@ -65,16 +69,16 @@ public class UserService implements UserDetailsService {
         return userRepository.save(user);
     }
 
-    public User changePassword(Optional<User> optionalUser, ResetPasswordDto resetPasswordDto){
+    public User changePassword(Optional<User> optionalUser, String newPassword){
         User user = optionalUser.get();
-        user.setPassword(passwordEncoder.encode(resetPasswordDto.getNewPassword()));
+        user.setPassword(passwordEncoder.encode(newPassword));
 
         return userRepository.save(user);
     }
 
-    public User changeEmail(Optional<User> optionalUser, ResetPasswordDto resetPasswordDto){
+    public User changeEmail(Optional<User> optionalUser, UpdateProfileDTO updateProfileDTO){
         User user = optionalUser.get();
-        user.setEmail(resetPasswordDto.getEmail());
+        user.setEmail(updateProfileDTO.getEmail());
 
         return userRepository.save(user);
     }

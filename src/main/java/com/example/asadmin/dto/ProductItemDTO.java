@@ -25,7 +25,7 @@ public class ProductItemDTO {
 
     private String nameKz;
 
-    private ZonedDateTime readyDuration;
+    private Long readyDuration;
 
     private int minAge;
 
@@ -33,9 +33,9 @@ public class ProductItemDTO {
 
     private String description;
 
-    private ZonedDateTime startAvailableTime;
+    private String startAvailableTime;
 
-    private ZonedDateTime endAvailableTime;
+    private String endAvailableTime;
 
     private Set<CategoryDTO> categoryDTOS;
 

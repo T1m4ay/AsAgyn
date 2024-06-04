@@ -22,18 +22,6 @@ public class ErrorDTO {
 
     private String stacktrace;
 
-//    private ProductErrorsDTOSet productErrors = new ProductErrorsDTOSet();
-//
-//    private CpErrorsDTOSet cpErrors;
-//
-//    public CpErrorsDTOSet getCpErrors() {
-//        return this.cpErrors;
-//    }
-//
-//    public void setCpErrors(CpErrorsDTOSet cpErrors) {
-//        this.cpErrors = cpErrors;
-//    }
-
     public int getStatus() {
         return status;
     }
@@ -83,13 +71,6 @@ public class ErrorDTO {
     }
 
 
-//    public ProductErrorsDTOSet getProductErrors() {
-//        return this.productErrors;
-//    }
-//
-//    public void setProductErrors(ProductErrorsDTOSet productErrors) {
-//        this.productErrors = productErrors;
-//    }
 
 
     @Override
@@ -101,7 +82,6 @@ public class ErrorDTO {
                 ", timestamp='" + getTimestamp() + "'" +
                 ", fieldErrors='" + getFieldErrors() + "'" +
                 ", stacktrace='" + getStacktrace() + "'" +
-//                ", productErrors='" + getProductErrors() + "'" +
                 "}";
     }
 

@@ -1,7 +1,7 @@
-package com.example.asadmin.api;
+package com.example.asadmin.api.mobile;
 
 import com.example.asadmin.dto.DiningSessionDTO;
-import com.example.asadmin.model.DiningSession;
+import com.example.asadmin.dto.PaymentMethodDTO;
 import com.example.asadmin.service.DiningSessionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(value = "/api/dining-session")
-public class DiningSessionController {
+@RequestMapping(value = "/mobile/api/dining-session")
+public class MobileDiningSessionController {
 
     @Autowired
     DiningSessionService service;
@@ -19,13 +19,7 @@ public class DiningSessionController {
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_GUEST')")
     @GetMapping("")
     public List<DiningSessionDTO> getDiningSessions(){
-        return service.getCurrentSessions();
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
-    @GetMapping("/all-session/{establishmentId}")
-    public List<DiningSessionDTO> getAllDiningSessionId(@PathVariable Long establishmentId){
-        return service.getAllDiningSessionByEstablishmentId(establishmentId);
+        return service.getCurrentUserSessions();
     }
 
     @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_GUEST')")
@@ -40,9 +34,10 @@ public class DiningSessionController {
         return service.create(establishmentId);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_CUSTOMER', 'ROLE_GUEST')")
     @PostMapping("/close-session/{id}")
-    public DiningSessionDTO closeDiningSession(@PathVariable Long id){
-        return service.closeDiningSession(id);
+    public DiningSessionDTO closeDiningSession(@PathVariable Long id, @RequestBody PaymentMethodDTO paymentMethodDTO){
+        return service.closeDiningSessionByCustomer(id, paymentMethodDTO);
     }
+
 }

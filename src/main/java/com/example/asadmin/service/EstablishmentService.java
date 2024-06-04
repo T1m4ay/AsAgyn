@@ -30,6 +30,8 @@ public class EstablishmentService {
 
     private final UserService userService;
 
+    private final MenuService menuService;
+
     public Establishment save(Establishment establishment){
         return repository.save(establishment);
     }
@@ -81,13 +83,15 @@ public class EstablishmentService {
                 .flatMap(d -> d.getOrderEntities()
                         .stream()
                         .filter(o -> o.getDateOfCreation().isBefore(betweenDatesCriteria.getEndDate())
-                                && o.getDateOfCreation().isAfter(betweenDatesCriteria.getStartDate())))
+                                && o.getDateOfCreation().isAfter(betweenDatesCriteria.getStartDate())
+                        )
+                )
                 .collect(Collectors.toSet());
         Set<Integer> costs = orderEntities
                 .stream()
                 .flatMap(o -> o.getOrderItems()
                         .stream()
-                        .map(OrderItem::getCost))
+                        .map(oi -> (oi.getCost() * oi.getQuantity())))
                 .collect(Collectors.toSet());
         int sum = costs.stream()
                 .mapToInt(Integer::intValue)
@@ -107,7 +111,7 @@ public class EstablishmentService {
             int sum = establishment.getDiningSessions().stream()
                     .flatMap(diningSession -> diningSession.getOrderEntities().stream())
                     .filter(order -> order.getDateOfCreation().getMonth() == month)
-                    .flatMapToInt(order -> order.getOrderItems().stream().mapToInt(OrderItem::getCost))
+                    .flatMapToInt(order -> order.getOrderItems().stream().mapToInt(oi -> (oi.getCost() * oi.getQuantity())))
                     .sum();
 
             monthRevenueMap.put(month, sum);
@@ -117,28 +121,39 @@ public class EstablishmentService {
     }
 
     public Establishment findById(Long id){
-        Establishment establishment = repository.findAllById(id);
-        return establishment;
+        return repository.findAllById(id);
     }
 
     public EstablishmentDTO findEstablishmentDTOById(Long id){
         return mapper.toDTO(repository.findAllById(id));
     }
 
-    public Long create(EstablishmentDTO establishmentDTO){
+    public EstablishmentDTO create(EstablishmentDTO establishmentDTO){
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         System.out.println("String currentUser: " + currentUser);
         Establishment establishment = mapper.toEntity(establishmentDTO);
         establishment.setUser(userService.findByUsername(currentUser).orElse(null));
-        return repository.save(establishment).getId();
+        Establishment dbEstablishment = repository.save(establishment);
+        EstablishmentDTO dto = mapper.toDTO(dbEstablishment);
+        dto.setMenuDTO(menuService.create(dbEstablishment));
+        return dto;
     }
 
-    public EstablishmentDTO getEstablishment(){
+    public ResponseDTO<EstablishmentDTO> getEstablishment(){
         String currentUser = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
         System.out.println("String currentUser: " + currentUser);
-        return mapper.toDTO(
+        ResponseDTO<EstablishmentDTO> responseDTO = new ResponseDTO<>();
+        EstablishmentDTO establishmentDTO = mapper.toDTO(
                 repository.findAllByUser(
                         userService.findByUsername(currentUser).orElse(null)
                 ));
+        if(establishmentDTO == null) {
+            responseDTO.setHasErrors(true);
+        }else{
+            establishmentDTO.setMenuDTO(menuService.findByEstablishmentId(establishmentDTO.getId()));
+            responseDTO.setObject(establishmentDTO);
+            responseDTO.setHasErrors(false);
+        }
+        return responseDTO;
     }
 }

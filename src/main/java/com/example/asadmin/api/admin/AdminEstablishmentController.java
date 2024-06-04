@@ -1,4 +1,4 @@
-package com.example.asadmin.api;
+package com.example.asadmin.api.admin;
 
 import com.example.asadmin.criteria.BetweenDatesCriteria;
 import com.example.asadmin.criteria.GeneralCriteria;
@@ -9,41 +9,40 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.Month;
-import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping(value = "/api/establishment")
-public class EstablishmentController {
+@RequestMapping(value = "/admin/api/establishment")
+public class AdminEstablishmentController {
 
     @Autowired
     EstablishmentService service;
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("")
-    public EstablishmentDTO getEstablishment(){
+    public ResponseDTO<EstablishmentDTO> getEstablishment(){
         return service.getEstablishment();
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public EstablishmentDTO getEstablishmentById(@PathVariable Long id){
         return service.findEstablishmentDTOById(id);
     }
 
-//    @PreAuthorize("hasAnyRole('ROLE_USER')")
-//    @PostMapping("")
-//    public EstablishmentDTO createEstablishment(@RequestBody EstablishmentDTO establishmentDTO){
-//        return service.create(establishmentDTO);
-//    }
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
+    @PostMapping("")
+    public EstablishmentDTO createEstablishment(@RequestBody EstablishmentDTO establishmentDTO){
+        return service.create(establishmentDTO);
+    }
 
     @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/all")
-    public PageResponse<EstablishmentDTO> ordersPageResponse(GeneralCriteria generalCriteria) {
+    public PageResponse<EstablishmentDTO> establishmentsPageResponse(GeneralCriteria generalCriteria) {
         return service.getAll(generalCriteria);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/order-count-period/{id}")
     public NumberOrderDTO orderCountPeriod(
             @PathVariable Long id,
@@ -51,7 +50,7 @@ public class EstablishmentController {
         return service.getNumberOfOrders(id, betweenDatesCriteria);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/revenue-period/{id}")
     public RevenueDTO revenuePeriod(
             @PathVariable Long id,
@@ -59,7 +58,7 @@ public class EstablishmentController {
         return service.getRevenue(id, betweenDatesCriteria);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/revenue-every-month-period/{id}")
     public Map<Month, Integer> getRevenueEveryMonthPeriod(@PathVariable Long id){
         return service.getMonthRevenue(id);

@@ -28,6 +28,8 @@ import org.springframework.util.ObjectUtils;
 import javax.persistence.criteria.Join;
 import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -191,7 +193,7 @@ public class ProductItemService {
             productItem.setNameKz(productItemDTO.getNameKz());
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getReadyDuration())){
-            productItem.setReadyDuration(productItemDTO.getReadyDuration());
+            productItem.setReadyDuration(Duration.ofSeconds(productItemDTO.getReadyDuration()));
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getMinAge())){
             productItem.setMinAge(productItemDTO.getMinAge());
@@ -203,10 +205,10 @@ public class ProductItemService {
             productItem.setDescription(productItemDTO.getDescription());
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getStartAvailableTime())){
-            productItem.setStartAvailableTime(productItemDTO.getStartAvailableTime());
+            productItem.setStartAvailableTime(ZonedDateTime.parse(productItemDTO.getStartAvailableTime()));
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getEndAvailableTime())){
-            productItem.setEndAvailableTime(productItemDTO.getEndAvailableTime());
+            productItem.setEndAvailableTime(ZonedDateTime.parse(productItemDTO.getEndAvailableTime()));
         }
         if(!ObjectUtils.isEmpty(productItemDTO.getCategoryDTOS())){
             productItem.setCategories(categoryMapper.toEntities(productItemDTO.getCategoryDTOS()));

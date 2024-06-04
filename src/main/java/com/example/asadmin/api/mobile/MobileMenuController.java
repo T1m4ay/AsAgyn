@@ -1,6 +1,5 @@
-package com.example.asadmin.api;
+package com.example.asadmin.api.mobile;
 
-import com.example.asadmin.dto.EstablishmentDTO;
 import com.example.asadmin.dto.MenuDTO;
 import com.example.asadmin.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,21 +7,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(value = "/api/menu")
-public class MenuController {
+@RequestMapping(value = "/mobile/api/menu")
+public class MobileMenuController {
 
     @Autowired
     MenuService menuService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER', 'ROLE_GUEST', 'ROLE_CUSTOMER')")
+    @PreAuthorize("hasAnyRole('ROLE_GUEST', 'ROLE_CUSTOMER')")
     @GetMapping("/{establishmentId}")
     public MenuDTO getMenu(@PathVariable Long establishmentId){
         return menuService.findByEstablishmentId(establishmentId);
-    }
-
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
-    @PostMapping("")
-    public MenuDTO createMenu(@RequestBody EstablishmentDTO establishmentDTO){
-        return menuService.create(establishmentDTO);
     }
 }

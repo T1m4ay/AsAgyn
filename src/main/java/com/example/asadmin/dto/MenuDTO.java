@@ -11,7 +11,5 @@ public class MenuDTO {
 
     private Long id;
 
-    private EstablishmentDTO establishmentDTO;
-
     private Set<ProductItemDTO> productItemDTOs;
 }

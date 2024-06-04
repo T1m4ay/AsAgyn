@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.ZonedDateTime;
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +28,7 @@ public class ProductItem{
     private String nameKz;
 
     @Column(name = "ready_duration")
-    private ZonedDateTime readyDuration;
+    private Duration readyDuration;
 
     @Column(name = "min_age")
     private int minAge;
@@ -91,11 +92,11 @@ public class ProductItem{
         this.nameKz = nameKz;
     }
 
-    public ZonedDateTime getReadyDuration() {
+    public Duration getReadyDuration() {
         return readyDuration;
     }
 
-    public void setReadyDuration(ZonedDateTime readyDuration) {
+    public void setReadyDuration(Duration readyDuration) {
         this.readyDuration = readyDuration;
     }
 

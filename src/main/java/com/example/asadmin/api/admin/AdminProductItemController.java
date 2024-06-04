@@ -1,4 +1,4 @@
-package com.example.asadmin.api;
+package com.example.asadmin.api.admin;
 
 import com.example.asadmin.criteria.ProductItemCriteria;
 import com.example.asadmin.dto.PageResponse;
@@ -13,13 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Set;
 
 @RestController
-@RequestMapping(value = "/api/product-item")
-public class ProductItemController {
+@RequestMapping(value = "/admin/api/product-item")
+public class AdminProductItemController {
 
     @Autowired
     ProductItemService productItemService;
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/in-menu/{menuId}")
     public PageResponse<ProductItemDTO> getAllProductItemsPage(
             @PathVariable Long menuId,
@@ -28,7 +28,7 @@ public class ProductItemController {
         return productItemService.getAll(productItemCriteria, sort, menuId);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PostMapping("/in-menu/{menuId}")
     public ResponseEntity<ProductItemDTO> create(@PathVariable Long menuId,@RequestBody ProductItemDTO productItemDTO){
         ResponseDTO<ProductItemDTO> responseDTO = productItemService.create(menuId, productItemDTO);
@@ -38,14 +38,14 @@ public class ProductItemController {
         return ResponseEntity.ok(responseDTO.getObject());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @GetMapping("/{id}")
     public ProductItemDTO getProductById(
             @PathVariable Long id){
         return productItemService.getById(id);
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @PutMapping("/{id}")
     public ResponseEntity<ProductItemDTO> partialUpdate(
             @PathVariable Long id,
@@ -57,7 +57,7 @@ public class ProductItemController {
         return ResponseEntity.ok(responseDTO.getObject());
     }
 
-    @PreAuthorize("hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    @PreAuthorize("hasAnyRole('ROLE_ADMIN')")
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteProductById(
             @PathVariable Long id){

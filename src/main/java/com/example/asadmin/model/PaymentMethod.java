@@ -17,12 +17,7 @@ public class PaymentMethod{
     @Column(name = "name")
     private String name;
 
-    @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "rel_payment_method__establishment",
-            joinColumns = @JoinColumn(name = "payment_method_id"),
-            inverseJoinColumns = @JoinColumn(name = "establishment_id")
-    )
+    @ManyToMany(mappedBy = "paymentMethods")
     @JsonIgnoreProperties(value = { "payment_method" }, allowSetters = true)
     private Set<Establishment> establishments;
 

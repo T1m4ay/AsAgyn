@@ -1,13 +1,12 @@
 package com.example.asadmin.service;
 
 import com.example.asadmin.criteria.GeneralCriteria;
-import com.example.asadmin.dto.OrderDTO;
-import com.example.asadmin.dto.OrderItemDTO;
-import com.example.asadmin.dto.PageResponse;
-import com.example.asadmin.dto.ResponseDTO;
+import com.example.asadmin.dto.*;
 import com.example.asadmin.enumeration.OrderStatus;
 import com.example.asadmin.mapper.OrderItemMapper;
 import com.example.asadmin.mapper.OrderMapper;
+import com.example.asadmin.model.DiningSession;
+import com.example.asadmin.model.Establishment;
 import com.example.asadmin.model.OrderEntity;
 import com.example.asadmin.model.OrderItem;
 import com.example.asadmin.repository.OrderRepository;
@@ -15,9 +14,12 @@ import com.pusher.rest.Pusher;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.HashSet;
@@ -111,12 +113,40 @@ public class OrderService {
         return orderDTO;
     }
 
-    public List<OrderDTO> getAllByEstablishmentId(Long establishmentId){
-        List<OrderEntity> orders = repository.findAllByEstablishmentId(establishmentId);
-        return orders.stream().map(mapper::toDTO).collect(Collectors.toList());
+    public PageResponse<OrderDTO> getAllByEstablishmentId(Long establishmentId, GeneralCriteria generalCriteria){
+        final Specification<OrderEntity> specification = ordersForEstablishment(establishmentId);
+        Page<OrderEntity> orders = repository.findAll(
+                specification,
+                PageRequest.of(
+                        generalCriteria.getPage() > 0 ? generalCriteria.getPage() - 1 : 0,
+                        generalCriteria.getSize()
+                )
+        );
+
+        PageResponse<OrderDTO> pageResponse = new PageResponse<>();
+        pageResponse.setItems(orders.get().map(mapper::toDTO).collect(Collectors.toList()));
+        pageResponse.setTotalPages(orders.getTotalPages());
+        pageResponse.setTotalCount(orders.getNumber());
+
+        return pageResponse;
     }
 
-    public OrderDTO findById(Long id){
-        return mapper.toDTO(repository.findById(id).orElse(null));
+    public static Specification<OrderEntity> ordersForEstablishment(Long establishmentId) {
+        return (root, query, builder) -> {
+            Join<OrderEntity, DiningSession> diningSessionJoin = root.join("diningSession", JoinType.INNER);
+            Join<DiningSession, Establishment> establishmentJoin = diningSessionJoin.join("establishment", JoinType.INNER);
+
+            return builder.equal(establishmentJoin.get("id"), establishmentId);
+        };
+    }
+    public void callWaiter(TableDTO tableDTO){
+        Pusher pusher = new Pusher("1783988", "1b1aac5f3ed531c5e179", "d6eafbe9223fb0184c85");
+        pusher.setCluster("ap2");
+        pusher.setEncrypted(true);
+
+        pusher.trigger(
+                "AsAgyn-channel",
+                "call-waiter",
+                Collections.singletonMap("clientWait", tableDTO));
     }
 }
